@@ -1,11 +1,12 @@
 <?php
 
 define('BASE_URL', getenv('TODOLIST_BASE_URL') ?: '/');
-define('DB_USER', getenv('TODOLIST_BASE_USER') ?:,'todolist');
+
+define('DB_USER', getenv('TODOLIST_BASE_USER') ?: 'todolist');
 define('DB_PASS', getenv('TODOLIST_DB_PASS'));
-define('DB_NAME', getenv('TODOLIST_BASE_NAME') ?:,'todolist');
-define('DB_HOST', getenv('TODOLIST_BASE_HOST') ?:,'127.0.0.1');
-define('DB_PORT', getenv('TODOLIST_BASE_PORT') ?:,'3306');
+define('DB_NAME', getenv('TODOLIST_BASE_NAME') ?:'todolist');
+define('DB_HOST', getenv('TODOLIST_BASE_HOST') ?:'127.0.0.1');
+define('DB_PORT', getenv('TODOLIST_BASE_PORT') ?:'3306');
 
 $db = new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME, DB_USER, DB_PASS);
 $items = array();
@@ -37,7 +38,7 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $updateQuery = ''; // IMPLEMENT ME
+        $updateQuery = "UPDATE todo SET done = IF(done=1, 0, 1) WHERE id=$id;"; // IMPLEMENT ME
         if(!$db->query($updateQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -53,7 +54,7 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $deleteQuery = ''; // IMPLEMENT ME
+        $deleteQuery = "DELETE FROM todo WHERE id= $id;"; // IMPLEMENT ME
         if(!$db->query($deleteQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -70,7 +71,7 @@ if (isset($_POST['action'])) {
 /**
  * Select all tasks from the database.
  */
-$selectQuery = ''; // IMPLEMENT ME
+$selectQuery = 'SELECT * FROM todo ORDER BY created_at DESC'; // IMPLEMENT ME
 $items = $db->query($selectQuery);
 ?>
 
